@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import re
 import sys
 
 import markov
@@ -14,14 +13,7 @@ def main(args):
 
     letters = args.pop()
 
-    fp = open('/usr/share/dict/words', 'r')
-    words = fp.read()
-    fp.close()
-
-    sourcewords = []
-    map(sourcewords.append, re.findall(ur'^[{0}]*$'.format(re.escape(letters)), words, re.I | re.M))
-
-    p = markov.Markov(length=10)
+    p = markov.Markov(length=10, letters=letters)
     print p._run()
 
 if __name__ == '__main__':

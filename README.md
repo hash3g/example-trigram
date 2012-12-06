@@ -1,0 +1,1 @@
+Usage: python gensent.py fork
