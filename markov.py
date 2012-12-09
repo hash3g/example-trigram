@@ -1,6 +1,7 @@
 import random
 import re
 import string
+import textwrap
 
 
 class Markov(object):
@@ -10,13 +11,12 @@ class Markov(object):
     Currently working on a generator of poetry.
     """
 
-    def __init__(self, text='en.txt', length=600, letters=''):
-        fil = text
-        fin = open('texts/' + fil)
-        self.text = ''
+    def __init__(self, textfile, length=600, letters=''):
         forbid = string.punctuation
-        for line in fin:
-            self.text += line.translate(None, forbid).strip().lower()
+
+        text = " ".join(textwrap.wrap(textfile)).strip()
+        self.text = re.sub('[%s]+' % re.escape(forbid), ' ', text).lower()
+
         self.text_list = self.generate_markov_list(self.text)
         self.markov_table = self.generate_markov_table(self.text_list)
         self.length = length
@@ -68,15 +68,24 @@ class Markov(object):
 
         return word
 
+    def lookup_proper_words_from_table(self, tablewords):
+        words = []
+        for word in tablewords:
+            if re.match('[%s]+' % re.escape(self.letters), word, re.I | re.U):
+                words.append(word)
+        return words
+
     def generate_markov_text(self, length, table):
 
-        result = ''
+        words = self.lookup_proper_words_from_table(table.keys())
+        if not words:
+            return ''
 
+        result = ''
         for j in range(10):
             o = list()
 
-            word = self.lookup_proper_word(table,
-                lambda x=None: random.choice(table.keys()))
+            word = random.choice(words)
 
             if not word:
                 continue
@@ -91,8 +100,7 @@ class Markov(object):
                     word = newword
                     o.append(newword)
                 else:
-                    word = self.lookup_proper_word(table,
-                        lambda x=None: random.choice(table.keys()))
+                    word = random.choice(words)
 
             if len(' '.join(o)) > len(result):
                 result = ' '.join(o)

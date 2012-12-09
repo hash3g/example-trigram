@@ -13,7 +13,11 @@ def main(args):
 
     letters = args.pop()
 
-    p = markov.Markov(length=10, letters=letters)
+    fp = open('texts/en.txt')
+
+    print 'Markov class:'
+    print
+    p = markov.Markov(fp.read(), length=10, letters=letters)
     print p._run()
 
 if __name__ == '__main__':
