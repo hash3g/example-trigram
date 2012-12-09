@@ -55,7 +55,7 @@ class Markov(object):
         o = list()
         for i in range(4):
             o.append(self.generate_markov_text(length, table))
-        return '\n'.join(o)
+        return '. '.join(o)
 
     def lookup_proper_word(self, table, callback=lambda x: x):
         # loop cycle 5 times before we do not find the word with letters
