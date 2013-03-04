@@ -10,6 +10,7 @@ from itertools import product
 import logging
 log = logging
 import random
+import re
 
 
 class AttemptError(Exception):
@@ -156,11 +157,11 @@ class MarkovChain(object):
 
         result = random.choice(self.transitions[prestate])
 
-        attempts = 50
-        while not self.letters.intersection(set(result)):
+        attempts = 20
+        while set(re.sub('\W', '', result)).difference(self.letters):
             result = random.choice(self.transitions[prestate])
             if attempts < 1:
-                raise AttemptError(u'Unable to find words in {0} attempts'.format(50))
+                raise AttemptError(u'Unable to find words in {0} attempts'.format(20))
             attempts -= 1
 
         log.debug("%s -> %s" % (str(prestate), str(result)))
@@ -206,11 +207,12 @@ class MarkovChain(object):
 
         prestate = random.choice(prestates)
 
-        attempts = 10
-        while not self.letters.intersection(set(prestate[0])) & self.letters.intersection(set(prestate[1])):
+        attempts = 50
+        while set(re.sub('\W', '', prestate[0])).difference(self.letters) \
+                or set(re.sub('\W', '', prestate[0])).difference(self.letters):
             prestate = random.choice(prestates)
             if attempts < 1:
-                raise AttemptError(u'Unable to find words in {0} attempts'.format(10))
+                raise AttemptError(u'Unable to find words in {0} attempts'.format(50))
             attempts -= 1
 
         self.check_prestate(prestate)
