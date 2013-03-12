@@ -1,5 +1,6 @@
 # clauses
 S -> Pronoun Vtrans N
+S -> N VP Prep Det N
 NP -> Det N
 NP -> Det N that VP
 NP -> Det Adj N

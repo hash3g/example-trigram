@@ -1,4 +1,5 @@
 import re
+import sys
 
 from random import choice
 
@@ -76,8 +77,15 @@ class ContextFreeReader(ContextFree):
                     self.add_rule(rule, expansion_list)
 
 if __name__ == '__main__':
+    args = sys.argv[1:]
 
-    cfree = ContextFreeReader('heasom')
+    if not args or len(args) > 1:
+        print "usage: gensent.py <letters>"
+        exit(1)
+
+    letters = args.pop()
+
+    cfree = ContextFreeReader(letters)
     cfree.clause_from_file(open("test.clauses"))
     cfree.parse_from_file(open("test.grammar"))
     expansion = cfree.get_expansion('S')
