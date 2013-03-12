@@ -1,6 +1,7 @@
 # clauses
 S -> Pronoun Vtrans N
 S -> N VP Prep Det N
+S -> Quote N VP Prep Det N Quote Comma CommonN VP
 NP -> Det N
 NP -> Det N that VP
 NP -> Det Adj N
