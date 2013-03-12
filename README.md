@@ -1,1 +1,1 @@
-Usage: python gensent.py fork
+Usage: python get-sentence.py abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
