@@ -4,6 +4,10 @@ import sys
 from random import choice
 
 
+class NotFoundSentence(Exception):
+    pass
+
+
 class ContextFree(object):
 
     def __init__(self):
@@ -23,7 +27,10 @@ class ContextFree(object):
         if start in self.rules:
             possible_expansions = self.rules[start]
             # grab one possible expansion
-            random_expansion = choice(possible_expansions)
+            try:
+                random_expansion = choice(possible_expansions)
+            except IndexError:
+                raise NotFoundSentence
             # call this method again with the current element of the expansion
             for elem in random_expansion:
                 self.expand(elem)
@@ -101,5 +108,8 @@ if __name__ == '__main__':
     cfree = ContextFreeReader(letters)
     cfree.clause_from_file(open("test.clauses"))
     cfree.parse_from_file(open("test.grammar"))
-    expansion = cfree.get_expansion('S')
-    print ' '.join(expansion)
+    try:
+        expansion = cfree.get_expansion('S')
+        print ' '.join(expansion)
+    except NotFoundSentence:
+        print 'Unable to find sentences with %s letters' % letters
