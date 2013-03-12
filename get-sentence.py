@@ -34,6 +34,7 @@ class ContextFree(object):
 
     # utility method to run the expand method and return the results
     def get_expansion(self, axiom):
+        self.filter_with_available_letters(axiom)
         self.expand(axiom)
         return self.expansion
 
@@ -43,6 +44,14 @@ class ContextFreeReader(ContextFree):
     def __init__(self, letters):
         self.letters = letters
         super(ContextFreeReader, self).__init__()
+
+    def filter_with_available_letters(self, axiom):
+        result = []
+        for s in self.rules[axiom]:
+            if not set(s).difference(set(self.list_rules)):
+                continue
+            result.append(s)
+        self.rules[axiom] = result
 
     def clause_from_file(self, file_obj):
         for line in file_obj:
@@ -63,6 +72,8 @@ class ContextFreeReader(ContextFree):
         # self.add_rule('Rule', ['a'])
         # self.add_rule('Rule', ['a', 'b', 'c'])
         # self.add_rule('Rule', ['b', 'c', 'd'])
+
+        self.list_rules = []
         for line in file_obj:
             line = re.sub(r"#.*$", "", line)  # get rid of comments
             line = line.strip()  # strip any remaining white space
@@ -73,6 +84,8 @@ class ContextFreeReader(ContextFree):
                 for expansion in expansions:
                     if set(expansion).difference(self.letters):
                         continue
+                    if rule not in self.list_rules:
+                        self.list_rules.append(rule)
                     expansion_list = expansion.split(" ")
                     self.add_rule(rule, expansion_list)
 
