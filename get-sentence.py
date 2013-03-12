@@ -48,7 +48,7 @@ class ContextFreeReader(ContextFree):
     def filter_with_available_letters(self, axiom):
         result = []
         for s in self.rules[axiom]:
-            if not set(s).difference(set(self.list_rules)):
+            if set(s).difference(set(self.list_rules)):
                 continue
             result.append(s)
         self.rules[axiom] = result
