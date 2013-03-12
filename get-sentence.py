@@ -1,3 +1,8 @@
+import re
+
+from random import choice
+
+
 class ContextFree(object):
 
     def __init__(self):
@@ -13,9 +18,6 @@ class ContextFree(object):
             self.rules[rule] = [expansion]
 
     def expand(self, start):
-
-        from random import choice
-
         # if the starting rule was in our set of rules, then we can expand it
         if start in self.rules:
             possible_expansions = self.rules[start]
@@ -41,8 +43,19 @@ class ContextFreeReader(ContextFree):
         self.letters = letters
         super(ContextFreeReader, self).__init__()
 
+    def clause_from_file(self, file_obj):
+        for line in file_obj:
+            line = re.sub(r"#.*$", "", line)  # get rid of comments
+            line = line.strip()  # strip any remaining white space
+            match_obj = re.search(r"(\w+) *-> *(.*)", line)
+            if match_obj:
+                rule = match_obj.group(1)
+                expansions = re.split(r"\s*\|\s*", match_obj.group(2))
+                for expansion in expansions:
+                    expansion_list = expansion.split(" ")
+                    self.add_rule(rule, expansion_list)
+
     def parse_from_file(self, file_obj):
-        import re
         # rules are stored in the given file in the following format:
         # Rule -> a | a b c | b c d
         # ... which will be translated to:
@@ -64,7 +77,8 @@ class ContextFreeReader(ContextFree):
 
 if __name__ == '__main__':
 
-    cfree = ContextFreeReader('he')
+    cfree = ContextFreeReader('heasom')
+    cfree.clause_from_file(open("test.clauses"))
     cfree.parse_from_file(open("test.grammar"))
     expansion = cfree.get_expansion('S')
     print ' '.join(expansion)

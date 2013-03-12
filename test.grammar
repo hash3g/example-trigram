@@ -1,18 +1,8 @@
-# clauses
-S -> NP VP
-S -> Interj NP VP
-S -> Pronoun Vtrans NP
-NP -> Det N
-NP -> Det N that VP
-NP -> Det Adj N
-VP -> Vtrans NP   # transitive verbs have direct objects
-VP -> Vintr       # intransitive verbs have no direct object
-
 # terminals
-Pronoun -> he | she | it
+Pronoun -> he | she | it | I
 Interj -> oh, | my, | wow, | damn,
 Det -> this | that | the
-N -> amoeba | dichotomy | seagull | trombone | corsage | restaurant | suburb
+N -> amoeba | dichotomy | seagull | trombone | corsage | restaurant | suburb | home | fly
 Adj -> bald | smug | important | tame | overstaffed | luxurious | blue
-Vtrans -> computes | examines | foregrounds | prefers | interprets | spins
+Vtrans -> computes | examines | foregrounds | prefers | interprets | spins| has | 
 Vintr -> coughs | daydreams | whines | slobbers | vocalizes | sneezes

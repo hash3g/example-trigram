@@ -1,0 +1,7 @@
+# clauses
+S -> Pronoun Vtrans N
+NP -> Det N
+NP -> Det N that VP
+NP -> Det Adj N
+VP -> Vtrans NP   # transitive verbs have direct objects
+VP -> Vintr       # intransitive verbs have no direct object
