@@ -1,9 +1,15 @@
-# clauses
-S -> Pronoun Vtrans N
-S -> N VP Prep Det N
-S -> Quote N VP Prep Det N Quote Comma CommonN VP
-NP -> Det N
-NP -> Det N that VP
-NP -> Det Adj N
-VP -> Vtrans NP   # transitive verbs have direct objects
-VP -> Vintr       # intransitive verbs have no direct object
+{
+	"S": [
+		["Pronoun", "Vtrans", "N"],
+		["N", "VP", "Prep", "Det", "N"],
+		["Quote", "N", "VP", "Prep", "Det", "N", "Quote", "Comma", "CommonN", "VP"]
+	],
+	"NP": [
+		["Det", "N"],
+		["Det", "Adj", "N"]
+	],
+	"VP": [
+		["Vtrans", "NP"],
+		["Vintr"]
+	]
+}

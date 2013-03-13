@@ -1,5 +1,5 @@
-import re
 import sys
+import simplejson
 
 from random import choice
 
@@ -61,16 +61,7 @@ class ContextFreeReader(ContextFree):
         self.rules[axiom] = result
 
     def clause_from_file(self, file_obj):
-        for line in file_obj:
-            line = re.sub(r"#.*$", "", line)  # get rid of comments
-            line = line.strip()  # strip any remaining white space
-            match_obj = re.search(r"(\w+) *-> *(.*)", line)
-            if match_obj:
-                rule = match_obj.group(1)
-                expansions = re.split(r"\s*\|\s*", match_obj.group(2))
-                for expansion in expansions:
-                    expansion_list = expansion.split(" ")
-                    self.add_rule(rule, expansion_list)
+        self.rules = simplejson.load(file_obj)
 
     def parse_from_file(self, file_obj):
         # rules are stored in the given file in the following format:
@@ -79,22 +70,25 @@ class ContextFreeReader(ContextFree):
         # self.add_rule('Rule', ['a'])
         # self.add_rule('Rule', ['a', 'b', 'c'])
         # self.add_rule('Rule', ['b', 'c', 'd'])
-
         self.list_rules = []
-        for line in file_obj:
-            line = re.sub(r"#.*$", "", line)  # get rid of comments
-            line = line.strip()  # strip any remaining white space
-            match_obj = re.search(r"(\w+) *-> *(.*)", line)
-            if match_obj:
-                rule = match_obj.group(1)
-                expansions = re.split(r"\s*\|\s*", match_obj.group(2))
-                for expansion in expansions:
-                    if set(expansion).difference(self.letters):
-                        continue
+
+        rules = simplejson.load(file_obj)
+        for rule in rules:
+            if rule in self.rules:
+                self.rules[rule] += rules[rule]
+                continue
+
+            for expansion in rules[rule]:
+                expansion_list = expansion.split(" ")
+                has_only_letters = False
+                for exp in expansion_list:
+                    if set(exp).difference(self.letters):
+                        has_only_letters = True
+                if not has_only_letters:
+                    self.add_rule(rule, expansion_list)
                     if rule not in self.list_rules:
                         self.list_rules.append(rule)
-                    expansion_list = expansion.split(" ")
-                    self.add_rule(rule, expansion_list)
+
 
 if __name__ == '__main__':
     args = sys.argv[1:]
