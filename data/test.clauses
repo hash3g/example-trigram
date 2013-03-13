@@ -1,6 +1,7 @@
 {
 	"S": [
 		["Pronoun", "Vtrans", "N"],
+		["N", "Vtrans", "N"],
 		["N", "VP", "Prep", "Det", "N"],
 		["Quote", "N", "VP", "Prep", "Det", "N", "Quote", "Comma", "CommonN", "VP"]
 	],
