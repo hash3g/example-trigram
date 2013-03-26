@@ -1,6 +1,7 @@
-import MySQLdb
-import re
 import json
+import MySQLdb
+import os
+import re
 
 
 def getwords(letters):
@@ -13,7 +14,10 @@ def getwords(letters):
     GROUP BY lemma
     '''
     # lexname.lexname LIKE "adv.%" AND
-    db = MySQLdb.connect(user='root', db="wordnet")
+    db = MySQLdb.connect(host=os.environ.get('DB_HOST', 'localhost'),
+                         user=os.environ.get('DB_USER', 'root'),
+                         passwd=os.environ.get('DB_PASSWORD', ''),
+                         db=os.environ.get('DB_NAME', 'wordnet'))
     cursor = db.cursor()
     cursor.execute(sql)
     return cursor.fetchall()
