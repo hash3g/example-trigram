@@ -1,5 +1,8 @@
 import sys
-from grammar.cfg import ContextFreeReader, NotFoundSentence
+import StringIO
+
+from grammar.contextfree import ContextFreeReader, NotFoundSentence
+from grammar.wordnet import getlemmas
 
 
 if __name__ == '__main__':
@@ -13,7 +16,7 @@ if __name__ == '__main__':
 
     cfree = ContextFreeReader(letters)
     cfree.clause_from_file(open("data/test.clauses"))
-    cfree.parse_from_file(open("data/test.grammar"))
+    cfree.parse_from_file(StringIO.StringIO(getlemmas(letters)))
     try:
         expansion = cfree.get_expansion('S')
         print ' '.join(expansion)
