@@ -5,12 +5,15 @@ import re
 
 
 def getwords(letters):
+    if not letters.strip():
+        return []
+
     sql = '''
     SELECT lexname.lexname, lemma FROM word
     INNER JOIN sense ON sense.wordno=word.wordno
     INNER JOIN synset ON synset.synsetno=sense.synsetno
     INNER JOIN lexname ON lexname.lexno=synset.lexno
-    WHERE lemma REGEXP "^[adhes]{4,}$"
+    WHERE lemma REGEXP "^[%s]{4,}$"
     GROUP BY lemma
     '''
     # lexname.lexname LIKE "adv.%" AND
@@ -19,7 +22,7 @@ def getwords(letters):
                          passwd=os.environ.get('DB_PASSWORD', ''),
                          db=os.environ.get('DB_NAME', 'wordnet'))
     cursor = db.cursor()
-    cursor.execute(sql)
+    cursor.execute(sql, [letters])
     return cursor.fetchall()
 
 
